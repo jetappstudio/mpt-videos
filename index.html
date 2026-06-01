@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MPT Video Dashboard</title>
+    <style>
+        *{box-sizing:border-box;margin:0;padding:0}
+        body{font-family:'Segoe UI',Tahoma,sans-serif;background:#0f0f1a;color:#e0e0e0;min-height:100vh;display:flex;align-items:center;justify-content:center}
+        .login-box{background:#1a1a2e;border:1px solid #2a2a3e;border-radius:16px;padding:40px;width:400px;text-align:center}
+        .login-box h1{color:#e94560;margin-bottom:8px;font-size:1.5em}
+        .login-box p{color:#888;margin-bottom:24px;font-size:0.9em}
+        input[type="password"]{width:100%;padding:12px;background:#0f0f1a;border:1px solid #2a2a3e;border-radius:8px;color:#e0e0e0;font-size:1em;margin-bottom:16px;text-align:center;letter-spacing:3px}
+        input:focus{outline:none;border-color:#e94560}
+        button{width:100%;padding:12px;background:#e94560;color:#fff;border:none;border-radius:8px;font-size:1em;font-weight:bold;cursor:pointer;transition:background 0.3s}
+        button:hover{background:#c73652}
+        .error{color:#f44336;font-size:0.85em;margin-top:12px;display:none}
+        .emoji{font-size:3em;margin-bottom:16px}
+    </style>
+</head>
+<body>
+<div class="login-box">
+    <div class="emoji">🎬</div>
+    <h1>MPT Video Dashboard</h1>
+    <p>הכנס סיסמה לצפייה בסרטונים</p>
+    <input type="password" id="passInput" placeholder="••••••••" autofocus onkeypress="if(event.key==='Enter')unlock()">
+    <button onclick="unlock()">כניסה</button>
+    <div class="error" id="errMsg">סיסמה שגויה. נסה שוב.</div>
+</div>
+<script>
+const HASH='14ff47b20ff40156486c5dc1f2504bf2815dddbd2e2662bd586e9c7866d4823d';
+async function sha256(s){const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(s));return Array.from(new Uint8Array(b)).map(x=>x.toString(16).padStart(2,'0')).join('')}
+async function unlock(){const v=document.getElementById('passInput').value;if((await sha256(v))===HASH){sessionStorage.setItem('mpt_auth','true');location.href='dashboard.html'}else{document.getElementById('errMsg').style.display='block';document.getElementById('passInput').value='';document.getElementById('passInput').focus()}}
+</script>
+</body>
+</html>
